@@ -1,53 +1,62 @@
-# Preguntas de análisis – Global Superstore
+# Preguntas del negocio – Global Superstore
 
-Dataset: `data/superstore_muestra.csv` (5,130 pedidos, muestra aleatoria del 10% por mes, 2011–2014).
+Dataset: Global Superstore (51,290 filas, pedidos 2011–2014). Tienda minorista internacional que vende muebles, artículos de oficina y tecnología en 7 mercados.
 
-## 1. Evolución en el tiempo
+Las preguntas se adaptaron de un modelo de 18 preguntas de negocio a las columnas disponibles en esta data.
 
-| # | Pregunta | Columnas | Gráfico |
-|---|---|---|---|
-| 1 | ¿Cómo han evolucionado las ventas y la ganancia de 2011 a 2014? | `Order.Date`, `Sales`, `Profit` | Líneas |
-| 2 | ¿Hay meses o temporadas con más ventas? | `Order.Date` (mes), `Sales` | Columnas por mes o mapa de calor año×mes |
+## Ajustes por limitaciones de la data
 
-## 2. Dónde vendemos
+| Concepto original | Qué usamos | Motivo |
+|---|---|---|
+| Devoluciones | Pedidos con pérdida (`Profit` < 0) | La data no tiene columna de devoluciones |
+| SLA | Días de envío (`Ship.Date` − `Order.Date`) según `Order.Priority` | No hay fecha de entrega comprometida |
+| Canal | Modo de envío (`Ship.Mode`) | No hay canal de venta |
 
-| # | Pregunta | Columnas | Gráfico |
-|---|---|---|---|
-| 3 | ¿Qué mercados y regiones generan más ventas y más ganancia? | `Market`, `Region`, `Sales`, `Profit` | Barras o mapa |
-| 4 | ¿Qué países tienen mucha venta pero poca ganancia o pérdida? | `Country`, `Sales`, `Profit` | Dispersión |
+## Preguntas agrupadas por gráfica
 
-## 3. Qué vendemos
+### Gráfica 1 – Tarjetas KPI: situación actual
 
-| # | Pregunta | Columnas | Gráfico |
-|---|---|---|---|
-| 5 | ¿Qué categoría aporta más ventas y cuál es la más rentable? | `Category`, `Sales`, `Profit` | Barras agrupadas |
-| 6 | ¿Qué subcategorías generan pérdidas? | `Sub.Category`, `Profit` | Barras horizontales ordenadas |
+| # | Pregunta | Columnas |
+|---|---|---|
+| 1 | ¿Cómo estamos hoy en términos generales de ventas, margen y operación? | `Sales`, `Profit`, días de envío |
+| 4 | ¿Los pedidos de prioridad Critical/High se envían más rápido que los Low? | `Order.Priority`, `Ship.Mode`, días de envío |
+| 5 | ¿Qué porcentaje de pedidos deja pérdida? | `Profit` < 0 |
 
-## 4. A quién vendemos
+### Gráfica 2 – Ventas y margen por trimestre: crecimiento
 
-| # | Pregunta | Columnas | Gráfico |
-|---|---|---|---|
-| 7 | ¿Qué segmento de cliente (Consumer, Corporate, Home Office) compra más? | `Segment`, `Sales` | Dona |
-| 8 | ¿Quiénes son los 10 clientes que más compran? | `Customer.Name`, `Sales` | Tabla o barras top 10 |
+| # | Pregunta | Columnas |
+|---|---|---|
+| 2 | ¿Estamos creciendo en ventas o no? | `Order.Date`, `Sales` |
+| 3 | ¿El margen acompaña el crecimiento de las ventas? | `Order.Date`, `Sales`, `Profit` |
+| 6 | ¿Existen señales tempranas de deterioro (por trimestre)? | `Order.Date`, margen % |
 
-## 5. Rentabilidad y descuentos
+### Gráfica 3 – Mercados, segmentos y modo de envío: dónde y a quién vendemos
 
-| # | Pregunta | Columnas | Gráfico |
-|---|---|---|---|
-| 9 | ¿Los descuentos altos hacen perder dinero? | `Discount`, `Profit` | Dispersión |
-| 10 | ¿Qué porcentaje de pedidos deja pérdida? | `Profit` < 0 | Tarjeta KPI |
+| # | Pregunta | Columnas |
+|---|---|---|
+| 7 | ¿Qué tipo de cliente genera más ventas y más margen? | `Segment`, `Sales`, `Profit` |
+| 8 | ¿Qué mercados muestran crecimiento en ventas respecto al año anterior? | `Market`, `Order.Date`, `Sales` |
+| 9 | ¿Qué modo de envío usan más los clientes y cuál deja más margen? | `Ship.Mode`, `Sales`, `Profit` |
+| 12 | ¿Qué modo de envío tiene mayor costo de envío respecto a la venta? | `Ship.Mode`, `Shipping.Cost`, `Sales` |
+| 13 | ¿Qué mercado tarda más en enviar los pedidos? | `Market`, días de envío |
 
-## 6. Logística
+### Gráfica 4 – Margen por subcategoría: qué vendemos
 
-| # | Pregunta | Columnas | Gráfico |
-|---|---|---|---|
-| 11 | ¿Cuánto cuesta el envío según el modo y la prioridad del pedido? | `Ship.Mode`, `Order.Priority`, `Shipping.Cost` | Barras apiladas |
-| 12 | ¿Cuántos días tarda en enviarse un pedido según el modo de envío? | `Ship.Date` − `Order.Date`, `Ship.Mode` | Columnas |
+| # | Pregunta | Columnas |
+|---|---|---|
+| 10 | ¿Qué productos bajan el margen? | `Sub.Category`, `Profit`, `Sales` |
+| 11 | ¿Qué categorías venden mucho pero aportan poco margen? | `Category`, `Sub.Category`, `Sales`, `Profit` |
+| 16 | ¿Qué combinaciones subcategoría × mercado son más críticas? | `Sub.Category`, `Market`, margen % |
 
-## Dato clave
+### Gráfica 5 – Descuento vs pérdida: causa y acción
 
-En la muestra, **el 24% de los pedidos deja pérdida**. Las preguntas 6 y 9 ayudan a explicar de dónde viene.
+| # | Pregunta | Columnas |
+|---|---|---|
+| 14 | ¿El problema está generalizado o concentrado en ciertos segmentos? | `Discount`, `Profit`, `Segment` |
+| 15 | ¿Qué problemas tienen mayor impacto en el margen? | `Discount`, `Profit` |
+| 17 | ¿Dónde deberíamos priorizar acciones para mejorar resultados? | `Sub.Category`, `Market`, `Discount` |
+| 18 | ¿Qué mejora tendría mayor impacto? (cuantificada en ganancia) | `Discount`, `Profit` |
 
-## Selección para el dashboard
+## Nota sobre la muestra
 
-Para un dashboard de una página: preguntas **1, 3, 5, 6, 9 y 10**.
+`data/superstore_muestra.csv` (10% por mes) sirve para practicar la maqueta y para porcentajes por fila (pedidos con pérdida, descuentos). Los totales por grupo y año (crecimiento por mercado, margen anual) se calculan con la data completa, porque en la muestra unos pocos pedidos grandes los distorsionan.
