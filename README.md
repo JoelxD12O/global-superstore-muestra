@@ -7,7 +7,7 @@ Trabajo de la semana 12. El objetivo es partir de **preguntas de negocio**, resp
 1. **Datos:** se obtuvo el dataset Global Superstore desde Kaggle.
 2. **Muestra:** se redujo el dataset con un muestreo aleatorio que conserva todos los meses.
 3. **Preguntas:** se adaptaron 18 preguntas de negocio a las columnas disponibles ([preguntas.md](preguntas.md)).
-4. **Insights:** se responden las preguntas con números *(pendiente)*.
+4. **Insights:** se responden las preguntas con números ([insights.md](insights.md)).
 5. **Maqueta:** se diseñan las gráficas del dashboard *(pendiente)*.
 6. **Power BI:** se construye el dashboard final *(pendiente)*.
 
@@ -72,6 +72,7 @@ Archivo: [data/superstore_muestra.csv](data/superstore_muestra.csv)
 | [global-superstore.ipynb](global-superstore.ipynb) | Notebook de análisis exploratorio (Python: pandas, matplotlib, seaborn) |
 | [data/superstore_muestra.csv](data/superstore_muestra.csv) | Muestra de 5,130 filas para Power BI |
 | [preguntas.md](preguntas.md) | 18 preguntas de negocio agrupadas en 5 gráficas |
+| [insights.md](insights.md) | Respuestas a las 18 preguntas con la data completa |
 
 El dataset completo (`superstore.csv`, 15 MB) no está en el repositorio. El notebook lo lee desde `data/superstore.csv`; para ejecutarlo, descárgalo de Kaggle y guárdalo en esa ruta.
 
