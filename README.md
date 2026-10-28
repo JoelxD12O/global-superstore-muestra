@@ -98,9 +98,12 @@ El detalle está en [preguntas.md](preguntas.md).
 
 ## Cómo usar en Power BI
 
-1. **Obtener datos → Texto/CSV** → elegir `data/superstore_muestra.csv`.
-2. En Power Query, verificar que `Order.Date` y `Ship.Date` sean de tipo **Fecha**.
-3. Crear las columnas y medidas que necesitan las preguntas:
+El dashboard se construye con el **dataset completo** (`data/superstore.csv`), para que los números coincidan con [insights.md](insights.md).
+
+1. **Obtener datos → Texto/CSV** → elegir `data/superstore.csv`.
+2. En **Origen del archivo**, elegir **65001: Unicode (UTF-8)**.
+3. En Power Query, verificar que `Order.Date` y `Ship.Date` sean de tipo **Fecha**, y eliminar la columna `记录数`.
+4. Crear las columnas y medidas que necesitan las preguntas:
    - `Días de envío = Ship.Date − Order.Date`
    - `Margen % = SUM(Profit) / SUM(Sales)`
    - `Pedido con pérdida = Profit < 0`
