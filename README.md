@@ -63,7 +63,7 @@ Archivo: [data/superstore_muestra.csv](data/superstore_muestra.csv)
 
 - **Codificación:** UTF-8 con BOM, para que Power BI y Excel lean bien los caracteres especiales.
 
-> **Importante:** la muestra sirve para practicar la maqueta y para porcentajes calculados fila por fila (por ejemplo, % de pedidos con pérdida o pérdida según el nivel de descuento). Los **totales por grupo y año** (crecimiento por mercado, margen anual) deben calcularse con el dataset completo, porque en la muestra unos pocos pedidos grandes los distorsionan. Por ejemplo, el crecimiento de APAC en 2014 es +24% en la data completa y +1% en la muestra.
+> **Importante:** todo el análisis y el dashboard usan esta muestra. Los porcentajes calculados fila por fila (% de pedidos con pérdida, pérdida según el nivel de descuento) son muy parecidos a los del dataset completo. Los **totales por grupo y año** (crecimiento por mercado, margen anual) son menos precisos, porque en la muestra unos pocos pedidos grandes pesan mucho. Por ejemplo, el crecimiento de APAC en 2014 es +1% en la muestra y +24% en el dataset completo.
 
 ## Archivos del repositorio
 
@@ -72,7 +72,7 @@ Archivo: [data/superstore_muestra.csv](data/superstore_muestra.csv)
 | [global-superstore.ipynb](global-superstore.ipynb) | Notebook de análisis exploratorio (Python: pandas, matplotlib, seaborn) |
 | [data/superstore_muestra.csv](data/superstore_muestra.csv) | Muestra de 5,130 filas para Power BI |
 | [preguntas.md](preguntas.md) | 18 preguntas de negocio agrupadas en 5 gráficas |
-| [insights.md](insights.md) | Respuestas a las 18 preguntas con la data completa |
+| [insights.md](insights.md) | Respuestas a las 18 preguntas, calculadas con la muestra |
 
 El dataset completo (`superstore.csv`, 15 MB) no está en el repositorio. El notebook lo lee desde `data/superstore.csv`; para ejecutarlo, descárgalo de Kaggle y guárdalo en esa ruta.
 
@@ -88,22 +88,21 @@ El detalle está en [preguntas.md](preguntas.md).
 | 4. Margen por subcategoría | Qué productos bajan el margen | 10, 11, 16 |
 | 5. Descuento vs pérdida | Causa del problema y acción recomendada | 14, 15, 17, 18 |
 
-## Hallazgos preliminares (data completa)
+## Hallazgos principales (muestra)
 
-- Las ventas crecen en promedio más de 20% al año: +18.5% en 2012, +27.2% en 2013 y +26.3% en 2014.
-- El margen se mantiene estable entre 11% y 12%.
-- El **24.5% de los pedidos deja pérdida**.
-- **Tables** es la única subcategoría con margen negativo (−8.5%).
-- En la muestra, los pedidos con descuento mayor a 20% pierden dinero en su gran mayoría: 72% entre 21–40% de descuento y 99% sobre 40%.
+El detalle está en [insights.md](insights.md).
+
+- Las ventas se duplicaron en 4 años: +23.6% en 2012, +24.9% en 2013 y +33.8% en 2014.
+- En 2014 el margen cayó de 12.8% a 11.3%.
+- El **23.9% de los pedidos deja pérdida**.
+- **Tables** es la única subcategoría con margen negativo (−9.3%).
+- Los pedidos con descuento mayor a 20% pierden dinero en su gran mayoría: 72% entre 21–40% de descuento y 99% sobre 40%.
 
 ## Cómo usar en Power BI
 
-El dashboard se construye con el **dataset completo** (`data/superstore.csv`), para que los números coincidan con [insights.md](insights.md).
-
-1. **Obtener datos → Texto/CSV** → elegir `data/superstore.csv`.
-2. En **Origen del archivo**, elegir **65001: Unicode (UTF-8)**.
-3. En Power Query, verificar que `Order.Date` y `Ship.Date` sean de tipo **Fecha**, y eliminar la columna `记录数`.
-4. Crear las columnas y medidas que necesitan las preguntas:
+1. **Obtener datos → Texto/CSV** → elegir `data/superstore_muestra.csv`.
+2. En Power Query, verificar que `Order.Date` y `Ship.Date` sean de tipo **Fecha**.
+3. Crear las columnas y medidas que necesitan las preguntas:
    - `Días de envío = Ship.Date − Order.Date`
    - `Margen % = SUM(Profit) / SUM(Sales)`
    - `Pedido con pérdida = Profit < 0`

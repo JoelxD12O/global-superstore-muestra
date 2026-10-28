@@ -59,4 +59,4 @@ Las preguntas se adaptaron de un modelo de 18 preguntas de negocio a las columna
 
 ## Nota sobre la muestra
 
-`data/superstore_muestra.csv` (10% por mes) sirve para practicar la maqueta y para porcentajes por fila (pedidos con pérdida, descuentos). Los totales por grupo y año (crecimiento por mercado, margen anual) se calculan con la data completa, porque en la muestra unos pocos pedidos grandes los distorsionan.
+Las preguntas se responden con `data/superstore_muestra.csv` (5,130 filas, 10% de cada mes), que es la misma data del dashboard en Power BI. Los totales por grupo y año (crecimiento por mercado) son menos precisos que los porcentajes por fila, porque en la muestra unos pocos pedidos grandes pesan mucho.
