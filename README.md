@@ -74,7 +74,7 @@ Archivo: [data/superstore_muestra.csv](data/superstore_muestra.csv)
 | [preguntas.md](preguntas.md) | 18 preguntas de negocio agrupadas en 5 gráficas |
 | [insights.md](insights.md) | Respuestas a las 18 preguntas, calculadas con la muestra |
 
-El dataset completo (`superstore.csv`, 15 MB) no está en el repositorio. El notebook lo lee desde `data/superstore.csv`; para ejecutarlo, descárgalo de Kaggle y guárdalo en esa ruta.
+El notebook lee la muestra (`data/superstore_muestra.csv`), así que se puede ejecutar directamente después de clonar el repositorio. El dataset completo (51,290 filas) no está incluido; se puede descargar desde Kaggle.
 
 ## Preguntas y gráficas del dashboard
 
