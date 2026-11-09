@@ -1,15 +1,3 @@
-"""
-Limpieza de data/base.csv y armado de un modelo estrella para Power BI.
-
-Salida en data/powerbi/:
-    fact_ventas.csv        -> tabla de hechos (una fila por línea de pedido)
-    dim_calendario.csv     -> una fila por día (se relaciona con Fecha_Pedido y Fecha_Envio)
-    dim_cliente.csv
-    dim_producto.csv
-    dim_geografia.csv
-    dim_modo_envio.csv
-    dim_prioridad.csv
-"""
 from pathlib import Path
 
 import pandas as pd
@@ -19,9 +7,7 @@ SALIDA.mkdir(parents=True, exist_ok=True)
 
 df_original = pd.read_csv("data/base.csv")
 
-# ---------------------------------------------------------------------------
-# 1. Limpieza: columnas que no aportan al análisis
-# ---------------------------------------------------------------------------
+
 columnas_a_eliminar = [
     "记录数",   # Contador exportado por la herramienta BI: vale 1 en todas las filas
     "Row.ID",   # Índice técnico de la fila, sin significado de negocio
@@ -43,10 +29,7 @@ def crear_dimension(columnas, nombre_id, orden=None):
     return dim
 
 
-# ---------------------------------------------------------------------------
-# 2. Dimensiones
-# ---------------------------------------------------------------------------
-# Cliente: Customer.ID es único por cliente (nombre y segmento consistentes)
+
 dim_cliente = (
     df[["Customer.ID", "Customer.Name", "Segment"]]
     .drop_duplicates()
@@ -78,8 +61,7 @@ dim_prioridad = pd.DataFrame({
     "Orden": range(1, len(orden_prioridad) + 1),
 })
 
-# Calendario: todos los días desde el 1-ene del primer año hasta el 31-dic del último
-# (cubre tanto fechas de pedido como de envío, sin huecos, como exige Power BI)
+
 inicio = pd.Timestamp(year=df["Order.Date"].min().year, month=1, day=1)
 fin = pd.Timestamp(year=df["Ship.Date"].max().year, month=12, day=31)
 fechas = pd.date_range(inicio, fin, freq="D")
@@ -89,24 +71,7 @@ meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
 dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 iso = fechas.isocalendar()
 
-dim_calendario = pd.DataFrame({
-    "Fecha": fechas,
-    "Anio": fechas.year,
-    "Trimestre": "T" + fechas.quarter.astype(str),
-    "Anio_Trimestre": fechas.year.astype(str) + "-T" + fechas.quarter.astype(str),
-    "Mes_Num": fechas.month,
-    "Mes": [meses[m - 1] for m in fechas.month],
-    "Anio_Mes": fechas.strftime("%Y-%m"),
-    "Semana_ISO": iso["week"].to_numpy(),
-    "Dia": fechas.day,
-    "Dia_Semana_Num": fechas.dayofweek + 1,  # 1 = lunes
-    "Dia_Semana": [dias[d] for d in fechas.dayofweek],
-    "Es_Fin_De_Semana": fechas.dayofweek >= 5,
-})
 
-# ---------------------------------------------------------------------------
-# 3. Tabla de hechos
-# ---------------------------------------------------------------------------
 fact = (
     df.merge(dim_producto, on=["Category", "Sub.Category", "Product.ID", "Product.Name"])
       .merge(dim_geografia, on=["Market", "Region", "Country", "State"])
@@ -140,9 +105,7 @@ dim_geografia = dim_geografia.rename(columns={
     "Market": "Mercado", "Region": "Region", "Country": "Pais", "State": "Estado",
 })
 
-# ---------------------------------------------------------------------------
-# 4. Validaciones y exportación
-# ---------------------------------------------------------------------------
+
 assert len(fact_ventas) == len(df_original), "Se perdieron filas al construir la tabla de hechos"
 assert fact_ventas.isna().sum().sum() == 0, "Hay llaves sin relación en la tabla de hechos"
 assert fact_ventas["Fecha_Envio"].max() <= fin and fact_ventas["Fecha_Pedido"].min() >= inicio
@@ -150,7 +113,6 @@ assert abs(fact_ventas["Ventas"].sum() - df_original["Sales"].sum()) < 1e-6
 
 tablas = {
     "fact_ventas": fact_ventas,
-    "dim_calendario": dim_calendario,
     "dim_cliente": dim_cliente,
     "dim_producto": dim_producto,
     "dim_geografia": dim_geografia,
