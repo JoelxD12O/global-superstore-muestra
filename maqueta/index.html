@@ -96,23 +96,18 @@ svg [data-x]:hover{filter:brightness(.88)}
     <section class="vis" data-src="g2"><div class="qs">Gráfica 2 · P2 P3 P6</div><h3>Ventas y margen por trimestre</h3><div id="g2"></div>
       <div class="how">Gráfico de líneas y columnas agrupadas · Eje X: Calendario[Año] &gt; Trimestre · Columnas: Ventas Totales · Línea: Margen Porcentual · La línea punteada es el margen promedio del filtro actual</div></section>
     <section class="vis" data-src="g3"><div class="qs">Gráfica 3 · P4 P7 P8 P9 P12 P13</div><h3>Mercados, segmentos, envío y prioridad</h3>
-      <div class="tabs" role="tablist"><button class="on" data-v="mercado" type="button">Mercado</button><button data-v="segmento" type="button">Segmento</button><button data-v="modo" type="button">Modo de envío</button><button data-v="prioridad" type="button">Prioridad</button></div>
+      <div class="tabs" data-g="g3" role="tablist"><button class="on" data-v="mercado" type="button">Mercado</button><button data-v="segmento" type="button">Segmento</button><button data-v="modo" type="button">Modo de envío</button><button data-v="prioridad" type="button">Prioridad</button></div>
       <div id="g3"></div>
       <div class="how">4 visuales encimados + Marcadores (desmarcar «Datos») + Navegador de marcadores · Los botones cambian qué gráfico se ve; no filtran datos</div></section>
   </div>
 
   <div class="grid two">
-    <section class="vis" data-src="g4"><div class="qs">Gráfica 4 · P10 P11</div><h3>Ventas y margen por subcategoría</h3><div id="g4"></div>
-      <div class="how">Barras agrupadas (Subcategoria, Ventas Totales) + Barras agrupadas finas (Subcategoria, Margen Porcentual, color por reglas) · El filtro Categoría reduce las subcategorías</div></section>
-    <section class="vis" data-src="g5"><div class="qs">Gráfica 5 · P15</div><h3>Cómo cambia el margen según el descuento</h3><div id="g5"></div>
-      <div class="how">Gráfico de líneas y columnas agrupadas · Eje X: Rango descuento (columna calculada) · Columnas: Ganancia Total · Línea: Margen Porcentual</div></section>
-  </div>
-
-  <div class="grid two">
-    <section class="vis" data-src="g6"><div class="qs">P16</div><h3>Combinaciones subcategoría × mercado más críticas</h3><div id="g6"></div>
-      <div class="how">Gráfico de dispersión · Valores: Combinacion (Subcategoria · Mercado) · X: Ventas Totales · Y: Margen Porcentual · Tamaño: Ganancia Total · Analítica: líneas de promedio X e Y</div></section>
-    <section class="vis" data-src="g7"><div class="qs">P14</div><h3>Regiones con margen bajo el promedio</h3><div id="g7"></div>
-      <div class="how">Matriz · Filas: Region · Columnas: Categoria · Valores: Margen Porcentual · Formato condicional → Iconos y Color de fondo por reglas contra el margen promedio del filtro actual</div></section>
+    <section class="vis" data-src="g4"><div class="qs">Gráfica 4 · P10 P11 P16</div><h3>Productos: qué baja el margen y dónde</h3>
+      <div class="tabs" data-g="g4" role="tablist"><button class="on" data-v="sub" type="button">Subcategorías</button><button data-v="combo" type="button">Subcategoría × mercado</button></div>
+      <div id="g4"></div><div class="how" id="how-g4"></div></section>
+    <section class="vis" data-src="g5"><div class="qs">Gráfica 5 · P14 P15</div><h3>¿Dónde cae el margen?</h3>
+      <div class="tabs" data-g="g5" role="tablist"><button class="on" data-v="desc" type="button">Por descuento</button><button data-v="region" type="button">Por región</button></div>
+      <div id="g5"></div><div class="how" id="how-g5"></div></section>
   </div>
 
   <div class="vis foot"><b>Cómo se usa, igual que en Power BI.</b> Los <b>filtros de arriba</b> afectan todas las gráficas y se combinan entre sí. <b>Haz clic</b> en una barra, punto o celda para filtrar las demás gráficas; la gráfica donde hiciste clic resalta tu selección. Vuelve a hacer clic en lo mismo, o en un espacio vacío de esa gráfica, para quitarlo. <b>Pasa el cursor</b> para ver el detalle. La comparación con el año anterior de la Gráfica 3 funciona como <code>SAMEPERIODLASTYEAR</code>: mira el año previo aunque haya un año filtrado. Todo usa visuales incluidos gratis en Power BI Desktop.</div>
@@ -127,7 +122,8 @@ const D = DATA.dims;
 const Y=0,Q=1,MK=2,SG=3,CT=4,SC=5,RG=6,MD=7,PR=8,SA=9,PF=10,DS=11,CO=12,DY=13,OR=14;
 const F = {year:null, market:null, segment:null, category:null};
 let X = null;            // filtro cruzado: {src, dim, val}
-let showVals = false, view = 'mercado';
+let showVals = false;
+const views = {g3:'mercado', g4:'sub', g5:'desc'};
 
 const C = {blue:'#3A6EA5', blueL:'#C9D8EA', grey:'#C8C6C4', orange:'#E8871E', red:'#C0392B', redL:'#F4C7C1', green:'#3C8D5A', teal:'#2A9D8F', muted:'#605E5C', line:'#A19F9D'};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -155,7 +151,7 @@ function label(dim,v){
   return {yq:()=>`T${v%10} ${Math.floor(v/10)}`, mk:()=>D.market[v], sg:()=>D.segment[v], md:()=>D.mode[v], sc:()=>D.sub[v], bin:()=>'Descuento '+BINS[v],
     combo:()=>D.sub[Math.floor(v/100)]+' · '+D.market[v%100], rg:()=>D.region[v], rgct:()=>D.region[Math.floor(v/100)]+' · '+D.category[v%100], pr:()=>'Prioridad '+D.prio[v]}[dim]();
 }
-const SRCNAME = {g1:'Gráfica 1', g2:'Gráfica 2', g3:'Gráfica 3', g4:'Gráfica 4', g5:'Gráfica 5', g6:'P16', g7:'P14'};
+const SRCNAME = {g1:'Gráfica 1', g2:'Gráfica 2', g3:'Gráfica 3', g4:'Gráfica 4', g5:'Gráfica 5'};
 // atributos de un elemento clicable: filtro + resaltado si este visual es el origen de la selección
 function hit(src, dim, val, tip){
   const dim_ = X && X.src===src && !(X.dim===dim && X.val===val) ? ' opacity="0.3"' : '';
@@ -229,7 +225,7 @@ function aligned(names, ids, dim, series, W=660, row=40, lw=110){
 }
 function g3(){
   const el = document.getElementById('g3');
-  if(view==='mercado'){
+  if(views.g3==='mercado'){
     // Igual que SAMEPERIODLASTYEAR: el año anterior ignora el filtro de año; si hay un trimestre seleccionado, compara ese trimestre
     const yqSel = X && X.src!=='g3' && X.dim==='yq' ? X.val : null;
     const all = DATA.rows.filter(r => (F.market===null||r[MK]===F.market) && (F.segment===null||r[SG]===F.segment) && (F.category===null||r[CT]===F.category)
@@ -258,11 +254,11 @@ function g3(){
   }
   const rows = rowsFor('g3');
   if(!rows.length){ el.innerHTML = EMPTY; return; }
-  if(view==='segmento'){
+  if(views.g3==='segmento'){
     const s = agg(rows, SG), ids = [...s.keys()].sort((a,b)=>s.get(b).S-s.get(a).S), tips = ids.map(i=>tipSM(D.segment[i],s.get(i)));
     el.innerHTML = aligned(ids.map(i=>D.segment[i]), ids, 'sg', [['Ventas Totales',ids.map(i=>s.get(i).S),C.blue,money,tips],['Margen Porcentual',ids.map(i=>s.get(i).m),C.orange,v=>pct(v),tips]])
       + '<p class="note">P7 qué cliente vende más y deja más margen</p>';
-  } else if(view==='prioridad'){
+  } else if(views.g3==='prioridad'){
     const s = agg(rows, PR), ids = D.prio.map((n,i)=>i).filter(i=>s.has(i));
     const tips = ids.map(i=>`Prioridad ${D.prio[i]}|Días de envío: ${days(s.get(i).days)}|Pedidos: ${num(s.get(i).orders)}`);
     el.innerHTML = aligned(ids.map(i=>D.prio[i]), ids, 'pr', [['Dias Envio Promedio',ids.map(i=>s.get(i).days),C.blue,days,tips],['Total Pedidos',ids.map(i=>s.get(i).orders),C.grey,num,tips]])
@@ -315,7 +311,7 @@ function g5(){
 
 // ---------- P16: dispersión ----------
 function g6(){
-  const el = document.getElementById('g6'), rows = rowsFor('g6');
+  const el = document.getElementById('g4'), rows = rowsFor('g4');
   if(!rows.length){ el.innerHTML = EMPTY; return; }
   const c = [...agg(rows, r => r[SC]*100 + r[MK]).entries()].map(([k,a]) => ({k, sub:D.sub[Math.floor(k/100)], mk:D.market[k%100], ...a}));
   const t = total(rows);
@@ -329,8 +325,8 @@ function g6(){
     T(Rx-4,B-8,'Vende mucho y deja poco','q','end'), T((Lx+Rx)/2,H-6,'Ventas Totales →','ax','middle'),
     T(14,(Tp+B)/2,'Margen Porcentual →','ax','middle',`transform="rotate(-90 14 ${(Tp+B)/2})"`)];
   c.sort((a,b)=>Math.abs(b.P)-Math.abs(a.P)).forEach(a => { const bad=a.S>=5000 && a.P<0, r=3+Math.sqrt(Math.abs(a.P)/pmax)*12;
-    const op = X && X.src==='g6' ? '' : ` fill-opacity="${bad?.85:.4}"`;
-    b.push(`<circle cx="${fx(a.S).toFixed(1)}" cy="${fy(a.m).toFixed(1)}" r="${r.toFixed(1)}" fill="${bad?C.red:C.blue}"${op} stroke="#fff" ${hit('g6','combo',a.k,tipSM(a.sub+' · '+a.mk,a))}/>`); });
+    const op = X && X.src==='g4' ? '' : ` fill-opacity="${bad?.85:.4}"`;
+    b.push(`<circle cx="${fx(a.S).toFixed(1)}" cy="${fy(a.m).toFixed(1)}" r="${r.toFixed(1)}" fill="${bad?C.red:C.blue}"${op} stroke="#fff" ${hit('g4','combo',a.k,tipSM(a.sub+' · '+a.mk,a))}/>`); });
   const crit = c.filter(a=>a.S>=5000 && a.P<0).sort((a,b)=>a.P-b.P).slice(0,4), placed=[];
   crit.forEach(a => { let x=fx(a.S)+9, y=fy(a.m)+4, anchor='start';
     if(x>Rx-120){ x-=18; anchor='end'; }
@@ -343,21 +339,26 @@ function g6(){
 
 // ---------- P14: matriz ----------
 function g7(){
-  const el = document.getElementById('g7'), rows = rowsFor('g7');
+  const el = document.getElementById('g5'), rows = rowsFor('g5');
   if(!rows.length){ el.innerHTML = EMPTY; return; }
   const t = total(rows), cell = agg(rows, r => r[RG]*100 + r[CT]), reg = agg(rows, RG);
   const cats = D.category.map((n,i)=>i).filter(i => rows.some(r=>r[CT]===i));
   const ids = [...reg.keys()].sort((a,b)=>reg.get(a).m-reg.get(b).m);
   const td = (a, dim, val, name) => { if(!a) return '<td class="nd">—</td>';
     const v=a.m, cls = v>=t.m?'ok':(v<t.m-0.03?'bad':'mid'), ic={ok:'✓',mid:'~',bad:'✗'}[cls];
-    const dimmed = X && X.src==='g7' && !(X.dim===dim && X.val===val) ? ' dim' : '';
-    return `<td class="${cls}${dimmed}" data-x="g7|${dim}|${val}" data-tip="${esc(tipSM(name,a))}">${ic} ${pct(v)}</td>`; };
+    const dimmed = X && X.src==='g5' && !(X.dim===dim && X.val===val) ? ' dim' : '';
+    return `<td class="${cls}${dimmed}" data-x="g5|${dim}|${val}" data-tip="${esc(tipSM(name,a))}">${ic} ${pct(v)}</td>`; };
   el.innerHTML = `<table class="mx"><thead><tr><th>Región</th>${cats.map(i=>`<th>${D.category[i]}</th>`).join('')}<th>Total</th></tr></thead><tbody>`
     + ids.map(i => `<tr><th>${esc(D.region[i])}</th>${cats.map(cI=>td(cell.get(i*100+cI),'rgct',i*100+cI,D.region[i]+' · '+D.category[cI])).join('')}${td(reg.get(i),'rg',i,D.region[i])}</tr>`).join('')
     + `</tbody></table><p class="note">✓ sobre el promedio (${pct(t.m)}) · ~ hasta 3 puntos debajo · ✗ más de 3 puntos debajo</p>`;
 }
 
 // ---------- Render ----------
+const HOW = {
+  g4:{sub:'Barras agrupadas (Subcategoria, Ventas Totales) + Barras agrupadas finas (Subcategoria, Margen Porcentual, color por reglas) · P10 P11',
+      combo:'Gráfico de dispersión · Valores: Combinacion (Subcategoria · Mercado) · X: Ventas Totales · Y: Margen Porcentual · Tamaño: Ganancia Total · Analítica: líneas de promedio X e Y · P16'},
+  g5:{desc:'Gráfico de líneas y columnas agrupadas · Eje X: Rango descuento (columna calculada) · Columnas: Ganancia Total · Línea: Margen Porcentual · P15',
+      region:'Matriz · Filas: Region · Columnas: Categoria · Valores: Margen Porcentual · Formato condicional → Iconos y Color de fondo por reglas contra el margen promedio · P14'}};
 function render(){
   const names = {year:F.year, market:F.market==null?null:D.market[F.market], segment:F.segment==null?null:D.segment[F.segment], category:F.category==null?null:D.category[F.category]};
   for(const k in names) document.getElementById('sl-'+k).classList.toggle('on', names[k]!=null);
@@ -367,7 +368,11 @@ function render(){
   h += ` — ${n.toLocaleString('en-US')} de ${DATA.rows.length.toLocaleString('en-US')} líneas`;
   document.getElementById('chips').innerHTML = h;
   document.querySelectorAll('[data-src]').forEach(s => s.classList.toggle('src', !!X && X.src===s.dataset.src && s.tagName==='SECTION'));
-  g1(); g2(); g3(); g4(); g5(); g6(); g7();
+  g1(); g2(); g3();
+  if(views.g4==='sub') g4(); else g6();
+  if(views.g5==='desc') g5(); else g7();
+  document.getElementById('how-g4').textContent = HOW.g4[views.g4];
+  document.getElementById('how-g5').textContent = HOW.g5[views.g5];
 }
 
 // ---------- Interacción ----------
@@ -389,8 +394,9 @@ document.addEventListener('click', e => {
 document.getElementById('clear').addEventListener('click', () => { for(const k in F) F[k]=null; X=null; document.querySelectorAll('.sl select').forEach(s=>s.value=''); render(); });
 document.getElementById('vals').addEventListener('click', e => { showVals=!showVals; e.currentTarget.setAttribute('aria-pressed',showVals); e.currentTarget.textContent = showVals?'Ocultar valores':'Mostrar valores'; render(); });
 document.querySelectorAll('.tabs button').forEach(btn => btn.addEventListener('click', () => {
-  view = btn.dataset.v; document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===btn));
-  if(X && X.src==='g3') X=null; render(); }));
+  const g = btn.closest('.tabs').dataset.g; views[g] = btn.dataset.v;
+  btn.parentElement.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===btn));
+  if(X && X.src===g) X=null; render(); }));
 document.addEventListener('keydown', e => { if(e.key==='Escape' && X){ X=null; render(); } });
 
 // Información al pasar el cursor
