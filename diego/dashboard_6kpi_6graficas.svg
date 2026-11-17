@@ -1,0 +1,22 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1920" height="1080" fill="#F2F2F7"/>
+  <rect width="1920" height="90" fill="#FFFFFF"/>
+  <g transform="translate(1580 25)" stroke="#14532D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="7" width="36" height="34" rx="2"/>
+    <path d="M10 2V12M30 2V12M2 17H38M10 24H15M23 24H28M10 32H15M23 32H28"/>
+  </g>
+  <g fill="#FFFFFF">
+    <rect x="20" y="110" width="301.67" height="125" rx="5"/>
+    <rect x="335.67" y="110" width="301.66" height="125" rx="5"/>
+    <rect x="651.33" y="110" width="301.67" height="125" rx="5"/>
+    <rect x="967" y="110" width="301.67" height="125" rx="5"/>
+    <rect x="1282.67" y="110" width="301.66" height="125" rx="5"/>
+    <rect x="1598.33" y="110" width="301.67" height="125" rx="5"/>
+    <rect x="20" y="255" width="613.33" height="392.5" rx="5"/>
+    <rect x="653.33" y="255" width="613.34" height="392.5" rx="5"/>
+    <rect x="1286.67" y="255" width="613.33" height="392.5" rx="5"/>
+    <rect x="20" y="667.5" width="613.33" height="392.5" rx="5"/>
+    <rect x="653.33" y="667.5" width="613.34" height="392.5" rx="5"/>
+    <rect x="1286.67" y="667.5" width="613.33" height="392.5" rx="5"/>
+  </g>
+</svg>
