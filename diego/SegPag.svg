@@ -1,0 +1,16 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1920" height="1080" fill="#F2F2F7"/>
+<rect width="1920" height="90" fill="white"/>
+<g transform="translate(1580 25)" stroke="#14532D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="7" width="36" height="34" rx="2"/>
+  <path d="M10 2V12M30 2V12M2 17H38M10 24H15M23 24H28M10 32H15M23 32H28"/>
+</g>
+<rect x="24" y="116" width="456.75" height="461" fill="white"/>
+<rect x="492.75" y="116" width="456.75" height="461" fill="white"/>
+<rect x="961" y="116" width="926" height="461" fill="white"/>
+<rect x="961.5" y="589" width="456.75" height="461" fill="white"/>
+<rect x="1430.25" y="589" width="456.75" height="461" fill="white"/>
+<rect x="24" y="589" width="300.667" height="461" fill="white"/>
+<rect x="336.667" y="589" width="300.667" height="461" fill="white"/>
+<rect x="649.333" y="589" width="300.667" height="461" fill="#FFFEFE"/>
+</svg>
