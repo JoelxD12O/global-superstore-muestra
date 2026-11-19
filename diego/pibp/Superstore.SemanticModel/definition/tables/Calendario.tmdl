@@ -1,0 +1,99 @@
+table Calendario
+	lineageTag: b963d1f6-f624-418d-ab9f-10872ba0c193
+	dataCategory: Time
+
+	column Fecha
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: 8dc466ce-790d-41be-8421-6aeee5aee735
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 1d624ec7-43a9-4844-afd5-768c82317e70
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = User
+
+	column 'Mes Num'
+		dataType: int64
+		formatString: 0
+		lineageTag: b18cfa73-4258-4f5a-b131-b80dd24c6860
+		summarizeBy: none
+		sourceColumn: Mes Num
+
+		annotation SummarizationSetBy = User
+
+	column Mes
+		dataType: string
+		lineageTag: bb0ad877-35a5-4971-adef-da61d9d3cc10
+		summarizeBy: none
+		sourceColumn: Mes
+		sortByColumn: 'Mes Num'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = User
+
+	column 'Trimestre Num' = ROUNDUP ( Calendario[Mes Num] / 3, 0 )
+		isHidden
+		lineageTag: 80363a69-27b0-4cfc-8483-8956207baa5c
+		summarizeBy: none
+
+	column Trimestre = "T" & ROUNDUP ( Calendario[Mes Num] / 3, 0 )
+		lineageTag: 2b59b8e2-865e-4109-b1d5-839319d1dce3
+		sortByColumn: 'Trimestre Num'
+
+	column 'Bimestre Num' = ROUNDUP ( Calendario[Mes Num] / 2, 0 )
+		dataType: int64
+		isHidden
+		lineageTag: eac88b40-c4aa-4ce8-8d92-88b696d7968c
+		summarizeBy: none
+
+	column Bimestre = SWITCH ( Calendario[Bimestre Num], 1, "Ene–Feb", 2, "Mar–Abr", 3, "May–Jun", 4, "Jul–Ago", 5, "Sep–Oct", "Nov–Dic" )
+		dataType: string
+		lineageTag: 54a3d7fb-9675-443d-98c8-8ea8b8bf147b
+		sortByColumn: 'Bimestre Num'
+
+	column 'Año Trimestre Num' = Calendario[Año] * 10 + Calendario[Trimestre Num]
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 64cfc272-3eda-4133-ae07-b92689e83528
+		summarizeBy: none
+
+	/// Eje del área apilada de Dashboard pt2 (2011 T1 ... 2014 T4)
+	column 'Año Trimestre' = Calendario[Año] & " " & Calendario[Trimestre]
+		dataType: string
+		lineageTag: 23cc940a-a89f-419e-aa52-773aa244d868
+		sortByColumn: 'Año Trimestre Num'
+
+	/// Trimestre con etiqueta invisible (espacios de ancho cero): el área de Dashboard pt2 muestra solo el año y la barra separadora
+	column 'Trimestre Eje' = REPT ( UNICHAR ( 8203 ), Calendario[Trimestre Num] )
+		dataType: string
+		isHidden
+		lineageTag: 6a593e04-206c-4233-90dd-e0323fe7b78d
+		sortByColumn: 'Trimestre Num'
+
+	partition Calendario = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\danil\OneDrive\Documentos\powerbaisada\global_superstore_modelo_estrella.xlsx - Calendario.csv"),[Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Fecha", type date}, {"Año", Int64.Type}, {"Mes Num", Int64.Type}, {"Mes", type text}})
+				in
+				    #"Tipo cambiado"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

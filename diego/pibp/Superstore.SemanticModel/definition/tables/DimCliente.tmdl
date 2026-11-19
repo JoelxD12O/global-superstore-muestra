@@ -1,0 +1,42 @@
+table DimCliente
+	lineageTag: d6ec3585-15f0-4bd2-a6fd-7213517efd54
+
+	column 'Customer.ID'
+		dataType: string
+		lineageTag: cbe501b8-af79-4b8b-8a65-e93954816725
+		summarizeBy: none
+		sourceColumn: Customer.ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer.Name'
+		dataType: string
+		lineageTag: 760151c8-6967-41d0-b8f1-ac8dd2bb4de9
+		summarizeBy: none
+		sourceColumn: Customer.Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 1ef2a23d-e349-48b4-837c-f44c20c17cb4
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCliente = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\danil\OneDrive\Documentos\powerbaisada\global_superstore_modelo_estrella.xlsx - DimCliente.csv"),[Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}}),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Tipo cambiado", [PromoteAllScalars=true]),
+				    #"Tipo cambiado1" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Customer.ID", type text}, {"Customer.Name", type text}, {"Segment", type text}})
+				in
+				    #"Tipo cambiado1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

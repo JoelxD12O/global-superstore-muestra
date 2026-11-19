@@ -1,0 +1,43 @@
+table 'Eje Producto'
+	lineageTag: d89eca83-163e-43b1-87a0-b7caa36877bc
+
+	column 'Eje Producto Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 806fe0cd-583a-4385-981d-307f62dbeb33
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+	column 'Eje Producto Fields'
+		dataType: string
+		isHidden
+		lineageTag: 68d8850c-1235-4b95-943a-967aa22fec1a
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Eje Producto Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Eje Producto'
+		dataType: string
+		lineageTag: 4fe2e245-3856-43ea-b826-694aa3e4fc09
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Eje Producto Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Eje Producto Fields'
+
+	partition 'Eje Producto' = calculated
+		mode: import
+		source =
+				{
+				    ("Subcategoría", NAMEOF('DimProducto'[Sub.Category]), 0),
+				    ("Categoría", NAMEOF('DimProducto'[Category]), 1)
+				}
+

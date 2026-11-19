@@ -1,0 +1,49 @@
+table 'Color por'
+	lineageTag: 14f91860-370d-4fc1-a8d9-7e0b2e5cf282
+
+	column 'Color por'
+		lineageTag: 88af81f2-eff8-42d7-8f3d-d31aa1c02991
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Color por Orden'
+
+		relatedColumnDetails
+			groupByColumn: 'Color por Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Color por Campos'
+		isHidden
+		lineageTag: 0783a08c-617f-42a1-b6b1-9ff7b17add96
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Color por Orden'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Color por Orden'
+		isHidden
+		formatString: 0
+		lineageTag: ed15c8ec-63d5-445c-ac71-b219566a4726
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Color por' = calculated
+		mode: import
+		source =
+				{
+				    ("Estado", NAMEOF('Combinaciones'[Estado]), 0),
+				    ("Subcategoría", NAMEOF('Combinaciones'[Subcategoría]), 1),
+				    ("Mercado", NAMEOF('Combinaciones'[Mercado]), 2)
+				}
+
+	annotation PBI_Id = 8e72541bf2454bc785fc30ae9398983d
+

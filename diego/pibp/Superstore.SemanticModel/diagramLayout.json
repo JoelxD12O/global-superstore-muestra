@@ -1,0 +1,172 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 519.9999999999992,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 520.42326416698438,
+            "y": 0
+          },
+          "nodeIndex": "Base",
+          "nodeLineageTag": "4f4471c8-c801-4cf9-a908-0351894856ff",
+          "size": {
+            "height": 455.99999999999977,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 703.77234012335691,
+            "y": 485.16420451824172
+          },
+          "nodeIndex": "Calendario",
+          "nodeLineageTag": "b963d1f6-f624-418d-ab9f-10872ba0c193",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 492.99155834825717
+          },
+          "nodeIndex": "DimProducto",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 393.27656094922833,
+            "y": 653.73755612711966
+          },
+          "nodeIndex": "DimCliente",
+          "nodeLineageTag": "d6ec3585-15f0-4bd2-a6fd-7213517efd54",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1110.5564872139935,
+            "y": 331.25905964874278
+          },
+          "nodeIndex": "DimUbicacion",
+          "nodeLineageTag": "f12658f0-39d9-45bb-bb27-8691bd4eee14",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 1388.2360826197851,
+            "y": 393.12025157089465
+          },
+          "nodeIndex": "Medidas",
+          "nodeLineageTag": "8c1864c0-3cc5-4193-a615-feeb0aad86c5",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1665.9156780255767,
+            "y": 248.73408150921614
+          },
+          "nodeIndex": "Años Eje",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1949.9156780255767,
+            "y": 272.73408150921614
+          },
+          "nodeIndex": "Botones",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 2233.9156780255767,
+            "y": 272.73408150921614
+          },
+          "nodeIndex": "Eje Producto",
+          "nodeLineageTag": "d89eca83-163e-43b1-87a0-b7caa36877bc",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 2517.9156780255767,
+            "y": 314.86877806355983
+          },
+          "nodeIndex": "Combinaciones",
+          "nodeLineageTag": "4df34577-1eb0-44b9-90a6-d37734159b60",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 2801.9156780255767,
+            "y": 326.86877806355983
+          },
+          "nodeIndex": "Color por",
+          "nodeLineageTag": "14f91860-370d-4fc1-a8d9-7e0b2e5cf282",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {},
+          "nodeIndex": "Cascada Mercado",
+          "nodeLineageTag": "36cd2551-647b-48a5-beb6-1993eb7b4cbe",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100.00000000000016,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

@@ -1,0 +1,67 @@
+table DimUbicacion
+	lineageTag: f12658f0-39d9-45bb-bb27-8691bd4eee14
+
+	column UbicacionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: a90179c4-7543-4f3c-82ba-3e19fb333f3a
+		summarizeBy: none
+		sourceColumn: UbicacionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Market
+		dataType: string
+		lineageTag: c7716369-0ef0-4705-8fc3-a8187defebda
+		summarizeBy: none
+		sourceColumn: Market
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 9aac2fcb-d3c1-4535-ab00-8bc043f9c61f
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: b965189f-a4dd-46d1-b30d-addc730d0f39
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 883bc2c5-67f7-4caf-8140-6080b895b12e
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 1fe86057-a8f5-456f-9230-8a4adac54680
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimUbicacion = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\danil\OneDrive\Documentos\powerbaisada\global_superstore_modelo_estrella.xlsx - DimUbicacion.csv"),[Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"UbicacionKey", Int64.Type}, {"Market", type text}, {"Region", type text}, {"Country", type text}, {"State", type text}, {"City", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Tipo cambiado",{{"Market", "Market"}})
+				in
+				    #"Renamed Columns"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

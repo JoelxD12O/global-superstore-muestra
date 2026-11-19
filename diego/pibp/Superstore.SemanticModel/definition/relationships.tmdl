@@ -1,0 +1,25 @@
+relationship 2b450560-e0ce-4caa-adf5-1cd837678d5d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Base.'Ship.Date'
+	toColumn: LocalDateTable_6c090531-e711-4784-8107-5da671da2533.Date
+
+relationship AutoDetected_94a029e6-24a4-4158-9837-0bf2d4fcb2e6
+	fromColumn: Base.ProductoKey
+	toColumn: DimProducto.ProductoKey
+
+relationship AutoDetected_3c61e0dc-17e4-4aa3-b59c-5e63c35d47eb
+	fromColumn: Base.UbicacionKey
+	toColumn: DimUbicacion.UbicacionKey
+
+relationship AutoDetected_6d8b517f-c1b0-4075-b009-743a6a2fb78e
+	fromColumn: Base.'Customer.ID'
+	toColumn: DimCliente.'Customer.ID'
+
+relationship 27c8ce3d-3676-cf3b-b4b9-19518d78361e
+	fromColumn: Base.'Order.Date'
+	toColumn: Calendario.Fecha
+
+relationship Base_Combinación_Combinaciones_Combinación
+	fromColumn: Base.Combinación
+	toColumn: Combinaciones.Combinación
+

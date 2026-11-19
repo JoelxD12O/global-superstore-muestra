@@ -1,0 +1,48 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Subcategoría",
+  "name": "c0b1a5e5b00c45e5b002",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "bd25a602a70c02ca36c1",
+      "c0b1a5e5b00c45e5a001",
+      "c0b1a5e5b00c45e5a002"
+    ],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "80a7480f175e21b68093",
+    "sections": {
+      "80a7480f175e21b68093": {
+        "visualContainers": {
+          "bd25a602a70c02ca36c1": {
+            "singleVisual": {
+              "visualType": "scatterChart",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "c0b1a5e5b00c45e5a001": {
+            "singleVisual": {
+              "visualType": "scatterChart",
+              "objects": {}
+            }
+          },
+          "c0b1a5e5b00c45e5a002": {
+            "singleVisual": {
+              "visualType": "pivotTable",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

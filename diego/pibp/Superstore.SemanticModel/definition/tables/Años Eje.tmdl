@@ -1,0 +1,18 @@
+table 'Años Eje'
+	lineageTag: 8b7bb717-3968-4b5f-923c-96bd6959a002
+
+	column 'Año Eje'
+		formatString: 0
+		lineageTag: cbec82de-a0c6-4c3d-ba8c-3694c0487dd0
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Año Eje]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Años Eje' = calculated
+		mode: import
+		source = DISTINCT ( SELECTCOLUMNS ( Base, "Año Eje", YEAR ( Base[Order.Date] ) ) )
+
+	annotation PBI_Id = 70253f3ea2a5418f98b2645c837422c8
+

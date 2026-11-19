@@ -1,0 +1,50 @@
+table Botones
+	lineageTag: b3cf35c9-1a03-485d-aea4-b14f6fce6537
+
+	column 'Dimensión Graf 3'
+		lineageTag: 5763e92f-8bc1-4ec8-9a12-dffa582df0ac
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Parameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Fields'
+		isHidden
+		lineageTag: 3cd66c16-d926-49ac-8241-b7b27025d68a
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Order'
+		isHidden
+		formatString: 0
+		lineageTag: 22821ae2-7242-45fe-9d39-3a91f9d89013
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Botones = calculated
+		mode: import
+		source =
+				{
+				    ("Ship.Mode", NAMEOF('Base'[Ship.Mode]), 0),
+				    ("Order.Priority", NAMEOF('Base'[Order.Priority]), 1),
+				    ("Segment", NAMEOF('DimCliente'[Segment]), 2),
+				    ("Market", NAMEOF('DimUbicacion'[Market]), 3)
+				}
+
+	annotation PBI_Id = 532333b0e28f42f79a212907c1310622
+

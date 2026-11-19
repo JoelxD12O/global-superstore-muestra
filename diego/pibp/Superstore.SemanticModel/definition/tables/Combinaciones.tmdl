@@ -1,0 +1,44 @@
+/// Gráfica 9 (P16): una fila por combinación Subcategoría × Mercado, con su estado (crítica o resto)
+table Combinaciones
+	lineageTag: 4df34577-1eb0-44b9-90a6-d37734159b60
+
+	column Combinación
+		lineageTag: 2e38de4e-f472-4a84-b04c-5f174e920bb9
+		isNameInferred
+		sourceColumn: [Combinación]
+
+	column Subcategoría
+		lineageTag: b1324e1b-6fdf-4205-acc3-51f67bdbc97b
+		isNameInferred
+		sourceColumn: [Subcategoría]
+
+	column Mercado
+		lineageTag: e25a689c-0011-4011-8097-dcc5984ab9d0
+		isNameInferred
+		sourceColumn: [Mercado]
+
+	column Estado
+		lineageTag: 4e591ccf-832a-4f5d-8d65-74d2fd973a06
+		isNameInferred
+		sourceColumn: [Estado]
+
+	partition Combinaciones = calculated
+		mode: import
+		source =
+				
+				VAR _t =
+				    GROUPBY (
+				        Base,
+				        Base[Combinación], DimProducto[Sub.Category], DimUbicacion[Market],
+				        "@Ventas", SUMX ( CURRENTGROUP (), Base[Sales] ),
+				        "@Ganancia", SUMX ( CURRENTGROUP (), Base[Profit] )
+				    )
+				RETURN
+				    SELECTCOLUMNS (
+				        _t,
+				        "Combinación", Base[Combinación],
+				        "Subcategoría", DimProducto[Sub.Category],
+				        "Mercado", DimUbicacion[Market],
+				        "Estado", IF ( [@Ganancia] < 0 && [@Ventas] >= 5000, "Combinación que pierde (ventas ≥ $5K)", "Resto" )
+				    )
+

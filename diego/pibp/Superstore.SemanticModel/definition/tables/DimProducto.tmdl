@@ -1,0 +1,58 @@
+table DimProducto
+	lineageTag: 67ecdae4-e46a-4e16-a653-17b8822a3ff4
+
+	column ProductoKey
+		dataType: int64
+		formatString: 0
+		lineageTag: f6f62b7b-4d08-4a8a-951a-9fc762b77091
+		summarizeBy: none
+		sourceColumn: ProductoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 9affa008-d93d-4762-8c50-83dc1ebd5625
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub.Category'
+		dataType: string
+		lineageTag: be4f17b4-f2c9-4ce2-9775-e1a564022dc9
+		summarizeBy: none
+		sourceColumn: Sub.Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product.ID'
+		dataType: string
+		lineageTag: 605d7b6a-eff8-4d3a-bc78-fb384c1726c6
+		summarizeBy: none
+		sourceColumn: Product.ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product.Name'
+		dataType: string
+		lineageTag: 492c4a3d-287a-459f-8f46-6503ce7175e3
+		summarizeBy: none
+		sourceColumn: Product.Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProducto = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\danil\OneDrive\Documentos\powerbaisada\global_superstore_modelo_estrella.xlsx - DimProducto.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ProductoKey", Int64.Type}, {"Category", type text}, {"Sub.Category", type text}, {"Product.ID", type text}, {"Product.Name", type text}})
+				in
+				    #"Tipo cambiado"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

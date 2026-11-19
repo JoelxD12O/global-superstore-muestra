@@ -1,0 +1,32 @@
+model Model
+	culture: es-PE
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-MX
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Base","Calendario","DimCliente","DimProducto","DimUbicacion","Medidas"]
+
+annotation PBI_ProTooling = ["MCP-PBIModeling","DevMode"]
+
+ref table Base
+ref table DateTableTemplate_e7e21b2e-b8c3-4739-9979-a8b7fbbb4b91
+ref table LocalDateTable_6c090531-e711-4784-8107-5da671da2533
+ref table Calendario
+ref table DimCliente
+ref table DimProducto
+ref table DimUbicacion
+ref table Medidas
+ref table 'Años Eje'
+ref table Botones
+ref table 'Eje Producto'
+ref table Combinaciones
+ref table 'Color por'
+ref table 'Cascada Mercado'
+
+ref cultureInfo es-PE
+

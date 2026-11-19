@@ -1,0 +1,196 @@
+table Base
+	lineageTag: 4f4471c8-c801-4cf9-a908-0351894856ff
+
+	column 'Row.ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 374800dc-7209-4400-92e5-e2d46cf7f083
+		summarizeBy: count
+		sourceColumn: Row.ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order.ID'
+		dataType: string
+		lineageTag: 1c568df2-69eb-4f6c-8b3b-152565ffb43d
+		summarizeBy: none
+		sourceColumn: Order.ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order.Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5b4a047e-fc86-4de6-ba2a-48b34b4ae751
+		summarizeBy: none
+		sourceColumn: Order.Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Ship.Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e9c6e0a2-ede4-4e77-aae5-23684dc16a63
+		summarizeBy: none
+		sourceColumn: Ship.Date
+
+		variation Variation
+			isDefault
+			relationship: 2b450560-e0ce-4caa-adf5-1cd837678d5d
+			defaultHierarchy: LocalDateTable_6c090531-e711-4784-8107-5da671da2533.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Ship.Mode'
+		dataType: string
+		lineageTag: c5cdfd5a-1425-47e5-b883-1016fe053ed4
+		summarizeBy: none
+		sourceColumn: Ship.Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order.Priority'
+		dataType: string
+		lineageTag: be67e180-3ca9-4d3b-988e-01c97ee84652
+		summarizeBy: none
+		sourceColumn: Order.Priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer.ID'
+		dataType: string
+		lineageTag: 6c968313-de07-45c3-ab4b-592d6af52d23
+		summarizeBy: none
+		sourceColumn: Customer.ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductoKey
+		dataType: int64
+		formatString: 0
+		lineageTag: d09cf62d-c6fd-4bb8-a98a-7baba14a5489
+		summarizeBy: none
+		sourceColumn: ProductoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column UbicacionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: d092004e-fdd9-4361-87be-ebdd2815bf75
+		summarizeBy: none
+		sourceColumn: UbicacionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f0440ea-dea6-4bb4-9fe1-1051ac548159
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 31eb67c9-5604-4ec4-b159-cb03be1c81b3
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: 32040028-2cfe-4e6e-a660-28a87138c6ed
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Profit
+		dataType: double
+		lineageTag: 50df802d-f1a7-419c-876b-10fac656760d
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Shipping.Cost'
+		dataType: double
+		lineageTag: 10501a49-75d5-4c5e-bfa1-7b38ba925197
+		summarizeBy: sum
+		sourceColumn: Shipping.Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Orden Prioridad' =
+			
+			SWITCH ( Base[Order.Priority], "Critical", 1, "High", 2, "Medium", 3, "Low", 4 )
+		formatString: 0
+		lineageTag: 186991a7-828c-4d95-af3a-6b1806fb2906
+		summarizeBy: sum
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Order.Priority ordenada Critical, High, Medium, Low
+	column Prioridad = Base[Order.Priority]
+		lineageTag: e522563f-aa5f-4451-b839-e9d742c215c0
+		summarizeBy: none
+		sortByColumn: 'Orden Prioridad'
+
+	column 'Orden Envio' = SWITCH ( Base[Ship.Mode], "Standard Class", 1, "Second Class", 2, "First Class", 3, "Same Day", 4 )
+		isHidden
+		lineageTag: a29e5e78-8f1f-4e9e-a1ae-7f87d705d9a3
+		summarizeBy: none
+
+	/// Ship.Mode ordenado del más lento al más rápido
+	column 'Modo Envio' = Base[Ship.Mode]
+		lineageTag: f17e7855-6290-47fb-915a-abdcac808920
+		summarizeBy: none
+		sortByColumn: 'Orden Envio'
+
+	column 'Orden Descuento' = SWITCH ( TRUE (), Base[Discount] = 0, 1, Base[Discount] <= 0.2, 2, Base[Discount] <= 0.4, 3, 4 )
+		dataType: int64
+		isHidden
+		lineageTag: 3cfec24b-aa86-47a3-b104-46038726d37a
+		summarizeBy: none
+
+	column 'Rango Descuento' = SWITCH ( Base[Orden Descuento], 1, "Sin descuento", 2, "Bajo (1–20%)", 3, "Medio (21–40%)", "Alto (>40%)" )
+		dataType: string
+		lineageTag: e328402b-2975-47d1-a18a-16cffe14d113
+		sortByColumn: 'Orden Descuento'
+
+	/// Clave Subcategoría · Mercado para la Gráfica 9 (P16)
+	column Combinación = RELATED ( DimProducto[Sub.Category] ) & " · " & RELATED ( DimUbicacion[Market] )
+		dataType: string
+		isHidden
+		lineageTag: b42028f0-82ba-4709-bbb0-757a62f1c20f
+
+	partition Base = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\danil\OneDrive\Documentos\powerbaisada\global_superstore_modelo_estrella.xlsx - Base.csv"),[Delimiter=",", Columns=14, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Row.ID", Int64.Type}, {"Order.ID", type text}, {"Order.Date", type date}, {"Ship.Date", type date}, {"Ship.Mode", type text}, {"Order.Priority", type text}, {"Customer.ID", type text}, {"ProductoKey", Int64.Type}, {"UbicacionKey", Int64.Type}, {"Sales", Int64.Type}, {"Quantity", Int64.Type}, {"Discount", Percentage.Type}, {"Profit", type number}, {"Shipping.Cost", type number}})
+				in
+				    #"Tipo cambiado"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

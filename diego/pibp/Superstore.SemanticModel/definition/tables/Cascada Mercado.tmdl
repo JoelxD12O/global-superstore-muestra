@@ -1,0 +1,23 @@
+/// Pasos de la cascada de Dashboard pt2: ventas del año anterior + aporte de cada mercado
+table 'Cascada Mercado'
+	lineageTag: 36cd2551-647b-48a5-beb6-1993eb7b4cbe
+
+	column Paso
+		lineageTag: b3831592-1f34-40c7-9630-5a639952286d
+		isNameInferred
+		sourceColumn: [Paso]
+
+	column Orden
+		lineageTag: 96d5f3a7-c923-4dc2-9874-9d212d846040
+		isNameInferred
+		sourceColumn: [Orden]
+
+	partition 'Cascada Mercado' = calculated
+		mode: import
+		source =
+				
+				UNION (
+				    ROW ( "Paso", "Ventas año anterior", "Orden", 0 ),
+				    SELECTCOLUMNS ( VALUES ( DimUbicacion[Market] ), "Paso", DimUbicacion[Market], "Orden", 1 )
+				)
+
